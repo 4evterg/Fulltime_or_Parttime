@@ -23,7 +23,7 @@
       .inputs input[type='button'] {
         padding: 10px;
         cursor: pointer;
-        transition: .1s all;
+        transition: 0.1s all;
       }
       .results {
         padding-top: 20px;
@@ -31,7 +31,14 @@
         justify-content: center;
         align-items: center;
       }
+      h3 {
+        text-align: center;
+      }
     </style>
+    <h3>
+      Вводить значения в ковычках через запятую, никаких проверок на
+      правильность ввода не делал
+    </h3>
     <div class="inputs">
       <input
         type="text"
@@ -43,7 +50,6 @@
     </div>
     <div class="results" id="results"></div>
     <script>
-
       const krasivo = document.getElementById('krasivo');
       krasivo.addEventListener('click', () => {
         //для демо режима - передайте параметром строку demo
@@ -64,10 +70,14 @@
         // Чистим результат
         result.innerHTML = '';
 
+        let arguments_arr = arguments;
         // Этот кусок исключительно для демонстрации
         if (arguments[0] == 'demo' && arguments.length == 1) {
           let args = document.getElementById('args');
+
           args = args.value.split(',');
+          // аргументов нет - возвращаем пустой ответ
+          if (args.length == 1 && args[0] == '') return;
           args.forEach(function (el, index) {
             // Убираем лишние пробелы
             el = el.trim();
@@ -80,16 +90,19 @@
         // Конец куска исключительно для демонстрации
 
         // аргументов нет - возвращаем пустой ответ
-        if (arguments_arr.length == 0) {
-          return;
-        }
+        if (arguments_arr.length == 0) return;
 
         // перебираем аргументы
         [].forEach.call(arguments_arr, function (el) {
-          if (singleBrck(el)) result.innerHTML += 'OK ';
-          else result.innerHTML += 'KO ';
+          if (singleBrck(el)) {
+            result.innerHTML += 'OK ';
+            console.log('OK ');
+          } else {
+            result.innerHTML += 'KO ';
+            console.log('KO ');
+          }
         });
-
+        console.log('---------------------');
         // Функция проверки строки
         function singleBrck(arg) {
           const stack = [];
@@ -124,7 +137,6 @@
             }
           }
           // Пустой стек = хороший стек, значит всем нашлась пара
-          console.log(stack.length);
           return stack.length == 0;
         }
       }
