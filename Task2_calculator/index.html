@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+  <style>
+      .inputs {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+      .inputs input[type='text'] {
+        margin-bottom: 20px;
+        width: 100%;
+        padding: 10px;
+      }
+      .inputs input[type='button'] {
+        padding: 10px;
+        cursor: pointer;
+        transition: 0.1s all;
+      }
+      .results {
+        padding-top: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      h3 {
+        text-align: center;
+      }
+    </style>
+    <h3>Введите выражение</h3>
+    <div class="inputs">
+      <input type="text" name="" id="args" value="1 2 * 3 * 4 +" />
+      <input type="button" id="krasivo" value="НАЙТИ КРАСИВЫЙ!" />
+    </div>
+    <div class="results" id="results"></div>
+    <script>
+
+
+      let result = document.getElementById('results');
+      // Чистим результат
+      result.innerHTML = '';
+      krasivo.addEventListener('click', () => {
+        const krasivo = document.getElementById('krasivo');
+        let args = document.getElementById('args');
+        console.log(rpn(args.value));
+        result.innerHTML = rpn(args.value);
+      });
+
+
+
+      function rpn(arg) {
+        
+        if (arg == "") return 'KO';
+
+        let stack, token, i, x, y, z;
+        // Разбираемся с ненужными пробелами
+        arg = arg.replace(/^\s*|\s*$/g, '');
+        
+        // Разбиваем строку 
+        arg = arg.length > 0 ? arg.split(/\s+/) : [];        
+        stack = [];
+        for (i = 0; i < arg.length; ++i) {
+          token = arg[i];
+          // Является ли токен числом
+          if (/^[+-]?(\.\d+|\d+(\.\d*)?)$/.test(token)) z = Number(token);
+          else {
+            if (token.length > 1 || '+-*/'.indexOf(token) == -1 || stack.length < 2)
+              break;
+            y = stack.pop();
+            x = stack.pop();
+            // волшебный евал 
+            z = eval(x + token + ' ' + y);
+          }
+          stack.push(z);
+        }
+        // проверка на ошибки и возврат
+        return i < arg.length || stack.length > 1
+          ? 'KO'
+          : stack.length == 1
+          ? stack.pop()
+          : '';
+      }
+    </script>
+  </body>
+</html>
