@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      .inputs {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+      .inputs input[type='text'] {
+        margin-bottom: 20px;
+        width: 100%;
+        padding: 10px;
+      }
+      .inputs input[type='button'] {
+        padding: 10px;
+        cursor: pointer;
+        transition: 0.1s all;
+      }
+      .results {
+        padding-top: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      h3 {
+        text-align: center;
+      }
+    </style>
+    <h3>Введите массив как строку</h3>
+    <div class="inputs">
+      <input type="text" name="" id="args" value="1357913579024680213579" />
+      <input type="button" id="krasivo" value="НАЙТИ КРАСИВЫЙ!" />
+    </div>
+    <div class="results" id="results"></div>
+
+    <script>
+      let result = document.getElementById('results');
+      // Чистим результат
+      result.innerHTML = '';
+      krasivo.addEventListener('click', () => {
+        const krasivo = document.getElementById('krasivo');
+
+        let args = document.getElementById('args');
+        args = args.value.split('');
+        args.forEach(function (el, index) {
+          // Убираем лишние пробелы
+          // el = el.trim();
+          this[index] = parseInt(el);
+        }, args);
+
+        let size = args.length;
+        console.log(findSubArray(args, size));
+      });
+
+      function findSubArray(arr, n) {
+        // переводим чет/нечет в 0/1
+        let oddeven = [];
+        arr.forEach((el) => {
+          if (el % 2 == 0) oddeven.push(0);
+          else oddeven.push(1);
+        });
+
+        let sum = 0;
+        let maxsize = -1,
+          startindex = 0;
+        let endindex = 0;
+        // выбираем i как стартовую точку
+        for (let i = 0; i < n - 1; i++) {
+          sum = oddeven[i] == 0 ? -1 : 1;
+          // Разбираем все подмассивы начиная с i
+          for (let j = i + 1; j < n; j++) {
+            if (oddeven[j] == 0) sum += -1;
+            else sum += 1;
+
+            // Проверяем сумму подмассива, если 0,
+            // то сравниваем размер с предыдущим найденным
+            // подмассивом
+            if (sum == 0 && maxsize < j - i + 1) {
+              maxsize = j - i + 1;
+              startindex = i;
+            }
+          }
+        }
+        endindex = startindex + maxsize - 1;
+        if (maxsize == -1) result.innerHTML = 'Нет такого подмассива';
+        else result.innerHTML = '[' + arr.slice(startindex, endindex + 1) + ']';
+
+        // Возвращаем результат;
+        return arr.slice(startindex, endindex + 1);
+      }
+    </script>
+  </body>
+</html>
